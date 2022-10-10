@@ -1,0 +1,69 @@
+<template>
+	<lightning-card title="Pokemons">
+		<div class="slds-card__body slds-card__body_inner">
+            
+			<template if:true={pokemons.data}>
+                
+                <div class="slsd-p-around_xx-small">
+                    <p class="slds-var-m-bottom_xx-small"> <b>Numero de resultados encontrados: </b> {quantityOfPokemons}</p>
+                </div>
+
+
+                <div class="slds-grid">
+                    <div class="slds-col slds-p-horizontal_medium">
+                        <div class="slsd-p-around_xx-small slds-m-top_medium">
+                            <lightning-input type="search"
+                                onchange={handleSearchNameChange}
+                                variant="label-hidden"
+                                label="Búsqueda por Nombre"
+                                placeholder="Busqueda por Nombre "
+                                value={searchName}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-p-horizontal_medium">
+                        <div class="slsd-p-around_xx-small">
+                            <lightning-combobox name="Tipos" value={types} label="Filtrar por Tipos" placeholder="Filtrar por Tipos"
+                            options={optionsType} onchange={handleChangeType} >
+                            </lightning-combobox>
+                        </div>
+                        <div class="slsd-p-around_xx-small">
+                            <template for:each={allValues} for:item="val">
+                                <lightning-pill key={val} label={val} name={val} onremove={handleRemoveType}></lightning-pill>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-p-horizontal_medium">
+                        <div class="slsd-p-around_xx-small">
+                            <lightning-combobox name="Generacion" label="Filtrar por Generacion" value={generations} placeholder="Filtrar por Generacion"
+                            options={optionsGeneration} onchange={handleChangeGeneration} >
+                            </lightning-combobox>
+                        </div>
+                    </div>
+
+                    
+                </div>
+
+				<lightning-layout multiple-rows="true" pull-to-boundary="small">
+					<template for:each={pokemons.data} for:item="pokemon">
+						<lightning-layout-item key={pokemon.Id} size="3" class="slds-var-p-around_x-small">
+							<c-pokemon-tile pokemon={pokemon} onpokemonview={handlePokemonView}></c-pokemon-tile>
+						</lightning-layout-item>
+					</template>
+                <template if:false={hasResults}>
+                    <div class="slds-align_absolute-center slds-var-m-vertical_small">
+                        No se encontro ningun pokemon con este nombre.
+                    </div>
+                </template>
+				</lightning-layout>
+			</template>
+			<template if:true={pokemons.error}>
+				<div class="slds-text-color_error">
+					An error occurred while loading the pokemon list
+				</div>
+			</template>
+		</div>
+	</lightning-card>
+</template>
